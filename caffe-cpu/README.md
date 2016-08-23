@@ -26,9 +26,23 @@ docker build -t caffe:cpu .
 ## 运行其它实例
 
 只需把相关模型和数据放在某个文件夹（如`./workdir`，solver为`./workdir/solver.prototxt`），运行以下命令即可训练：
-```
+```bash
 docker run -ti --volume=$(pwd)/workdir:/workspace caffe:cpu caffe train --solver=solver.prototxt
 ```
+
+## 运行notebook
+
+```bash
+docker run -d -p 8888:8888 -ti caffe:cpu bash -c "pip install jupyter; jupyter notebook --no-browser --ip=*"
+```
+需要等待`jupyter`安装完毕才会启动notebook。
+也可以安装`jupyter`后把image保存起来：
+```bash
+docker run --name caffe-notebook -ti caffe:cpu pip install jupyter
+docker commit -m "Install jupyter." caffe-notebook caffe-notebook:cpu
+docker run -d -p 8888:8888 -ti caffe-notebook:cpu jupyter notebook --no-browser --ip=*
+```
+
 
 ## 可视化模型
 
